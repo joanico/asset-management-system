@@ -1,0 +1,47 @@
+{% extends 'asset_app/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Asset List</h2>
+    <a href="{% url 'asset_app:asset_add' %}" class="btn btn-primary">Add New Asset</a>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Asset Type</th>
+                <th>Name/Model</th>
+                <th>Serial Number</th>
+                <th>Responsible Person</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset in assets %}
+            <tr>
+                <td>{{ asset.get_asset_type_display }}</td>
+                <td>{{ asset.asset_name }}</td>
+                <td>{{ asset.serial_number }}</td>
+                <td>{{ asset.responsible_person.full_name }}</td>
+                <td>{{ asset.location }}</td>
+                <td>
+                    <span class="badge {% if asset.is_working %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ asset.is_working|yesno:"Working,Not Working" }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'asset_app:asset_edit' asset.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'asset_app:asset_delete' asset.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No assets found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

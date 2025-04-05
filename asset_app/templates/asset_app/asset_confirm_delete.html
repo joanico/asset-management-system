@@ -1,0 +1,17 @@
+{% extends 'asset_app/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Delete Asset</h2>
+    </div>
+    <div class="card-body">
+        <p>Are you sure you want to delete "{{ object.asset_name }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+            <a href="{% url 'asset_app:asset_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %} 
