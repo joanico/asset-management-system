@@ -13,7 +13,7 @@
                 <div class="col-md-6">
                     <h4 class="mb-4">Basic Information</h4>
                     {% for field in form %}
-                        {% if forloop.counter <= 4 %}
+                        {% if forloop.counter <= 6 %}
                             <div class="form-group">
                                 <label for="{{ field.id_for_label }}" class="form-label {% if field.field.required %}required-field{% endif %}">
                                     {{ field.label }}
@@ -37,9 +37,33 @@
                 </div>
                 
                 <div class="col-md-6">
-                    <h4 class="mb-4">Additional Details</h4>
+                    <h4 class="mb-4">Status and Condition</h4>
                     {% for field in form %}
-                        {% if forloop.counter > 4 %}
+                        {% if forloop.counter > 6 and forloop.counter <= 8 %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}" class="form-label {% if field.field.required %}required-field{% endif %}">
+                                    {{ field.label }}
+                                </label>
+                                
+                                {% if field.errors %}
+                                <div class="errorlist">
+                                    {% for error in field.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="help-text">{{ field.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <h4 class="mb-4 mt-4">Additional Details</h4>
+                    {% for field in form %}
+                        {% if forloop.counter > 8 %}
                             <div class="form-group">
                                 <label for="{{ field.id_for_label }}" class="form-label {% if field.field.required %}required-field{% endif %}">
                                     {{ field.label }}
@@ -81,4 +105,25 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusField = document.querySelector('#id_status');
+    const conditionDetailsField = document.querySelector('#id_condition_details');
+    const conditionDetailsGroup = conditionDetailsField.closest('.form-group');
+
+    function toggleConditionDetails() {
+        if (statusField.value === 'POOR') {
+            conditionDetailsGroup.style.display = 'block';
+            conditionDetailsField.required = true;
+        } else {
+            conditionDetailsGroup.style.display = 'none';
+            conditionDetailsField.required = false;
+        }
+    }
+
+    statusField.addEventListener('change', toggleConditionDetails);
+    toggleConditionDetails(); // Initial state
+});
+</script>
 {% endblock %} 

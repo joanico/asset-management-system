@@ -27,9 +27,13 @@
                 <td>{{ asset.responsible_person.full_name }}</td>
                 <td>{{ asset.location }}</td>
                 <td>
-                    <span class="badge {% if asset.is_working %}bg-success{% else %}bg-danger{% endif %}">
-                        {{ asset.is_working|yesno:"Working,Not Working" }}
-                    </span>
+                    {% if asset.status == 'GOOD' %}
+                        <span class="badge bg-success">Good Condition</span>
+                    {% elif asset.status == 'MAINTENANCE' %}
+                        <span class="badge bg-warning text-dark">Under Maintenance</span>
+                    {% elif asset.status == 'POOR' %}
+                        <span class="badge bg-danger">Not in Good Condition</span>
+                    {% endif %}
                 </td>
                 <td>
                     <a href="{% url 'asset_app:asset_edit' asset.pk %}" class="btn btn-sm btn-warning">Edit</a>
@@ -44,4 +48,23 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    .badge {
+        font-size: 0.9em;
+        padding: 0.5em 0.8em;
+    }
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+    .bg-warning {
+        background-color: #ffc107 !important;
+    }
+    .bg-danger {
+        background-color: #dc3545 !important;
+    }
+    .text-dark {
+        color: #212529 !important;
+    }
+</style>
 {% endblock %} 
