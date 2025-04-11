@@ -20,16 +20,26 @@ class AssetForm(forms.ModelForm):
         model = Asset
         fields = [
             'asset_type', 'other_asset_type', 'asset_name', 'serial_number',
-            'responsible_person', 'location', 'is_working', 'has_adapters',
-            'adapter_details', 'charger_replaced', 'number_of_chargers',
-            'charger_locations'
+            'responsible_person', 'location', 'is_working', 'status',
+            'condition_details', 'has_adapters', 'adapter_details',
+            'charger_replaced', 'number_of_chargers', 'charger_locations'
         ]
+        widgets = {
+            'condition_details': forms.Textarea(attrs={'rows': 3}),
+            'adapter_details': forms.Textarea(attrs={'rows': 3}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
         asset_type = cleaned_data.get('asset_type')
         other_asset_type = cleaned_data.get('other_asset_type')
+        status = cleaned_data.get('status')
+        condition_details = cleaned_data.get('condition_details')
         
         if asset_type == 'OTHER' and not other_asset_type:
             raise forms.ValidationError("Please specify the other asset type.")
+        
+        if status == 'POOR' and not condition_details:
+            raise forms.ValidationError("Please provide details about the asset's condition when status is 'Not in Good Condition'.")
+        
         return cleaned_data 

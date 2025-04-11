@@ -19,6 +19,13 @@ ASSET_TYPE_CHOICES = [
     ('OTHER', 'Other'),
 ]
 
+# Asset status choices
+ASSET_STATUS_CHOICES = [
+    ('GOOD', 'Good Condition'),
+    ('MAINTENANCE', 'Under Maintenance'),
+    ('POOR', 'Not in Good Condition'),
+]
+
 class Employee(models.Model):
     full_name = models.CharField(max_length=100)
     work_email = models.EmailField(unique=True)
@@ -72,6 +79,17 @@ class Asset(models.Model):
         default=True,
         help_text="Is the device in good working condition?"
     )
+    status = models.CharField(
+        max_length=20,
+        choices=ASSET_STATUS_CHOICES,
+        default='GOOD',
+        help_text="Current status of the asset"
+    )
+    condition_details = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Additional details about the asset's condition (required if status is 'Not in Good Condition')"
+    )
 
     # Additional Information
     has_adapters = models.BooleanField(
@@ -99,6 +117,21 @@ class Asset(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        super().clean()
+        if self.status == 'POOR' and not self.condition_details:
+            raise ValidationError({
+                'condition_details': 'Condition details are required when status is "Not in Good Condition"'
+            })
+        if self.asset_type == 'OTHER' and not self.other_asset_type:
+            raise ValidationError({
+                'other_asset_type': 'Other asset type must be specified when asset type is set to Other'
+            })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.get_asset_type_display()} - {self.asset_name} ({self.serial_number})"
