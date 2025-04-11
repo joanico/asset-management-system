@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib import messages
 from .models import Employee, Asset
 from .forms import EmployeeForm, AssetForm
@@ -74,3 +74,8 @@ class AssetDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Asset deleted successfully!')
         return super().delete(request, *args, **kwargs)
+
+class AssetDetailView(DetailView):
+    model = Asset
+    template_name = 'asset_app/asset_detail.html'
+    context_object_name = 'asset'
