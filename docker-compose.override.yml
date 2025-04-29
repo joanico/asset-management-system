@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  db:
+    ports:
+      - "5434:5432"  # Expose DB port for local development tools
+  
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code  # Mount code for live reload
+    ports:
+      - "8000:8000" 
