@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: runserver
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=mini_project.settings.development
+      - SECRET_KEY=dev-secret-key-replace-in-production
+      - DEBUG=True
+      - DATABASE_ENGINE=django.db.backends.sqlite3
+      - DATABASE_NAME=/app/db.sqlite3
+    depends_on:
+      - redis
+  
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data: 

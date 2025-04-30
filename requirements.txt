@@ -4,3 +4,13 @@ iniconfig==2.1.0
 packaging==24.2
 pluggy==1.5.0
 sqlparse==0.5.3
+
+# Production dependencies
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+redis==5.0.1
+whitenoise==6.6.0
+
+# Development dependencies
+pytest==7.4.3
+pytest-django==4.6.0
