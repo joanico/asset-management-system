@@ -20,6 +20,8 @@ services:
       - DATABASE_PASSWORD=${DB_PASSWORD}
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - SECURE_SSL_REDIRECT=False
     depends_on:
       - db
       - redis
