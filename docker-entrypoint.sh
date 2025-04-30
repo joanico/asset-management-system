@@ -2,6 +2,9 @@
 
 set -e
 
+# Ensure logs directory exists
+mkdir -p /app/logs
+
 # Wait for PostgreSQL if we're using it
 if [ "$DATABASE_ENGINE" = "django.db.backends.postgresql" ]; then
   echo "Waiting for PostgreSQL..."
